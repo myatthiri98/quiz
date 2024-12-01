@@ -1,6 +1,16 @@
-import { View, Text, StyleSheet, SafeAreaView, Button, Pressable } from "react-native";
-import QuestionCard from "../components/QuesitionCard";
-import { FontAwesome6 } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Button,
+  Pressable,
+} from "react-native"
+import QuestionCard from "../components/QuesitionCard"
+import { FontAwesome6 } from "@expo/vector-icons"
+import questions from "../questions"
+
+const question = questions[1]
 
 export default function QuizScreen() {
   return (
@@ -10,24 +20,25 @@ export default function QuizScreen() {
           <Text style={styles.title}>Question 1/5</Text>
         </View>
         <View>
-          <QuestionCard />
+          <QuestionCard question={question} />
           <Text style={styles.time}>20 sec</Text>
         </View>
-        <Pressable onPress={()=>console.warn('Pressed')
-        } 
-        onLongPress={()=> console.warn('Long Press')}
-        style={styles.button}>
+        <Pressable
+          onPress={() => console.warn("Pressed")}
+          onLongPress={() => console.warn("Long Press")}
+          style={styles.button}
+        >
           <Text style={styles.buttonText}>Next</Text>
           <FontAwesome6
-          name='arrow-right-long'
-          size={16}
-          color="white"
-          style={styles.buttonIcon}
+            name="arrow-right-long"
+            size={16}
+            color="white"
+            style={styles.buttonIcon}
           />
         </Pressable>
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -54,17 +65,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#005055",
     padding: 20,
     borderRadius: 100,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
-    color: 'white',
-    fontWeight: '500',
+    color: "white",
+    fontWeight: "500",
     fontSize: 16,
-    letterSpacing: 1.5
+    letterSpacing: 1.5,
   },
-  buttonIcon:{
-    position: 'absolute',
+  buttonIcon: {
+    position: "absolute",
     right: 10,
-  }
-});
+  },
+})
