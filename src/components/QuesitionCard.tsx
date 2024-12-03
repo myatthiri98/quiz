@@ -1,18 +1,20 @@
-import { View, Text, StyleSheet } from "react-native"
-import AnswerOption from "./AnswerOption"
-import { Question } from "./types"
-import Card from "./Card"
+import { View, Text, StyleSheet } from "react-native";
+import AnswerOption from "./AnswerOption";
+import { Question } from "./types";
+import Card from "./Card";
+import { useState } from "react";
 
 type QuestionCard = {
-  question: Question
-}
+  question: Question;
+};
 
 export default function QuestionCard({ question }: QuestionCard) {
-  const selectedOption = question.options[0]
+  const [selectedOption, setSelectedOption] = useState<string | undefined>();
 
   const onOptionsSelected = (option: string) => {
-    console.warn("Selected: ", option)
-  }
+    setSelectedOption(option);
+    console.warn("Selected option: ", option);
+  };
 
   return (
     <Card title={question.title}>
@@ -27,5 +29,5 @@ export default function QuestionCard({ question }: QuestionCard) {
         ))}
       </View>
     </Card>
-  )
+  );
 }

@@ -5,21 +5,27 @@ import {
   SafeAreaView,
   Button,
   Pressable,
-} from "react-native"
-import QuestionCard from "../components/QuesitionCard"
-import { FontAwesome6 } from "@expo/vector-icons"
-import questions from "../questions"
-import Card from "../components/Card"
-import CustomButton from "../components/CustomButton"
-
-const question = questions[1]
+} from "react-native";
+import QuestionCard from "../components/QuesitionCard";
+import { FontAwesome6 } from "@expo/vector-icons";
+import questions from "../questions";
+import Card from "../components/Card";
+import CustomButton from "../components/CustomButton";
+import { useState } from "react";
 
 export default function QuizScreen() {
+  const [questionIndex, setQuestionIndex] = useState<number>(0);
+  const question = questions[questionIndex];
+
+  function onNext() {
+    setQuestionIndex((currValue) => currValue + 1);
+  }
+
   return (
     <SafeAreaView style={styles.page}>
       <View style={styles.container}>
         <View>
-          <Text style={styles.title}>Question 1/5</Text>
+          <Text style={styles.title}>Question {questionIndex + 1}/5</Text>
         </View>
         {question ? (
           <View>
@@ -33,7 +39,7 @@ export default function QuizScreen() {
           </Card>
         )}
         <CustomButton
-          onPress={() => console.warn("Pressed")}
+          onPress={onNext}
           title="Next"
           rightIcon={
             <FontAwesome6 name="arrow-right-long" size={16} color="white" />
@@ -41,7 +47,7 @@ export default function QuizScreen() {
         />
       </View>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -64,4 +70,4 @@ const styles = StyleSheet.create({
     color: "#005055",
     fontWeight: "bold",
   },
-})
+});
