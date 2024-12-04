@@ -1,8 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View } from "react-native";
 import AnswerOption from "./AnswerOption";
 import { Question } from "./types";
 import Card from "./Card";
-import { useState } from "react";
 
 type QuestionCard = {
   question: Question;

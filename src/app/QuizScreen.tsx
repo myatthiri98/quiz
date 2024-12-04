@@ -6,14 +6,27 @@ import {
   Button,
   Pressable,
 } from "react-native";
-import QuestionCard from "../components/QuesitionCard";
+import QuestionCard from "../components/QuestionCard";
 import { FontAwesome6 } from "@expo/vector-icons";
 import Card from "../components/Card";
 import CustomButton from "../components/CustomButton";
 import { useQuizContext } from "../providers/QuizProvider";
+import { useEffect, useState } from "react";
 
 export default function QuizScreen() {
-  const { question, questionIndex, onNext } = useQuizContext();
+  const { question, questionIndex, onNext, score, totalQuestions, bestScore } =
+    useQuizContext();
+
+  const [time, setTime] = useState(20);
+
+  useEffect(() => {
+    setTime(20);
+    const timer = setInterval(() => {
+      setTime((t) => Math.max(0, t - 1)); // Ensure it doesn't go below 0
+    }, 1000);
+
+    return () => clearInterval(timer); // Cleanup on unmount or when question changes
+  }, [question]);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -24,12 +37,14 @@ export default function QuizScreen() {
         {question ? (
           <View>
             <QuestionCard question={question} />
-            <Text style={styles.time}>20 sec</Text>
+            <Text style={styles.time}>{time}sec</Text>
           </View>
         ) : (
           <Card title="Well Done">
-            <Text>Correct answers: 3/5</Text>
-            <Text>Best score: 10</Text>
+            <Text>
+              Correct answers: {score}/{totalQuestions}
+            </Text>
+            <Text>Best score: {bestScore} </Text>
           </Card>
         )}
         <CustomButton

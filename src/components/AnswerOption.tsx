@@ -8,14 +8,13 @@ type AnswerOption = {
 
 export default function AnswerOption({ option }: AnswerOption) {
   const { selectedOption, setSelectedOption } = useQuizContext();
-  const [score, setScore] = useState(0);
 
   const isSelected = option === selectedOption;
+
   return (
     <Pressable
       onPress={() => {
-        setSelectedOption(option);
-        setScore(score + 1);
+        setSelectedOption(option)
       }}
       style={[
         styles.container,

@@ -1,4 +1,10 @@
-import React, { createContext, useState, ReactNode, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
 import questions from "../questions";
 import { Question } from "../components/types";
 
@@ -8,12 +14,18 @@ type QuizContextType = {
   onNext: () => void;
   selectedOption?: string;
   setSelectedOption: (option: string) => void;
+  score: number;
+  totalQuestions: number;
+  bestScore: number;
 };
 
 export const QuizContent = createContext<QuizContextType>({
   questionIndex: 0,
   onNext: () => {},
   setSelectedOption: () => {},
+  score: 0,
+  totalQuestions: 0,
+  bestScore: 0,
 });
 
 export default function QuizProvider({ children }: { children: ReactNode }) {
@@ -22,22 +34,41 @@ export default function QuizProvider({ children }: { children: ReactNode }) {
 
   const [selectedOption, setSelectedOption] = useState<string | undefined>();
 
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useState(0);
+  const isFinished = questionIndex >= questions.length;
+
+  useEffect(() => {
+    if (isFinished === true && score > bestScore) {
+      setBestScore(score);
+    }
+  }, [isFinished]);
+
+  const restart = () => {
+    setQuestionIndex(0), setSelectedOption(""), setScore(0);
+  };
+
   const value = {
     question,
     questionIndex,
     onNext,
     selectedOption,
     setSelectedOption,
+    score,
+    totalQuestions: questions.length,
+    bestScore,
   };
 
   function onNext() {
+    if (isFinished) {
+      restart();
+      return;
+    }
+    if (selectedOption === question?.correctAnswer) {
+      setScore((currScore) => currScore + 1);
+    }
     setQuestionIndex((currValue) => currValue + 1);
   }
-
-  // const onOptionsSelected = (option: string) => {
-  //   setSelectedOption(option);
-  //   console.warn("Selected option: ", option);
-  // };
 
   return <QuizContent.Provider value={value}>{children}</QuizContent.Provider>;
 }
