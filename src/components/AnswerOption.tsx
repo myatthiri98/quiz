@@ -1,19 +1,22 @@
-import { View, Text, StyleSheet, Pressable } from "react-native"
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import { useQuizContext } from "../providers/QuizProvider";
+import { useState } from "react";
 
 type AnswerOption = {
-  option: string
-  isSelected?: boolean
-  onPress: () => void
-}
+  option: string;
+};
 
-export default function AnswerOption({
-  option,
-  isSelected,
-  onPress,
-}: AnswerOption) {
+export default function AnswerOption({ option }: AnswerOption) {
+  const { selectedOption, setSelectedOption } = useQuizContext();
+  const [score, setScore] = useState(0);
+
+  const isSelected = option === selectedOption;
   return (
     <Pressable
-      onPress={onPress}
+      onPress={() => {
+        setSelectedOption(option);
+        setScore(score + 1);
+      }}
       style={[
         styles.container,
         isSelected && {
@@ -24,7 +27,7 @@ export default function AnswerOption({
     >
       <Text>{option}</Text>
     </Pressable>
-  )
+  );
 }
 const styles = StyleSheet.create({
   container: {
@@ -32,4 +35,4 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 100,
   },
-})
+});
