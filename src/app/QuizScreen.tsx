@@ -11,22 +11,27 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import Card from "../components/Card";
 import CustomButton from "../components/CustomButton";
 import { useQuizContext } from "../providers/QuizProvider";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import useTimer from "../hooks/useTimer";
 
 export default function QuizScreen() {
   const { question, questionIndex, onNext, score, totalQuestions, bestScore } =
     useQuizContext();
 
-  const [time, setTime] = useState(20);
+  const { time, startTimer, resetTimer } = useTimer(20);
 
   useEffect(() => {
-    setTime(20);
-    const timer = setInterval(() => {
-      setTime((t) => Math.max(0, t - 1)); // Ensure it doesn't go below 0
-    }, 1000);
-
-    return () => clearInterval(timer); // Cleanup on unmount or when question changes
+    startTimer();
+    return () => {
+      resetTimer();
+    };
   }, [question]);
+
+  useEffect(() => {
+    if (time <= 0) {
+      onNext();
+    }
+  }, [time]);
 
   return (
     <SafeAreaView style={styles.page}>
@@ -37,7 +42,9 @@ export default function QuizScreen() {
         {question ? (
           <View>
             <QuestionCard question={question} />
-            <Text style={styles.time}>{time}sec</Text>
+            <Text style={styles.time} onPress={resetTimer}>
+              {time}sec
+            </Text>
           </View>
         ) : (
           <Card title="Well Done">
